@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup DMP - Resultados del Modelo de Recomendación</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Chart.js para visualizaciones -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        /* Estilos personalizados para la estética del dashboard */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        /* Color principal de Zumba para las métricas de negocio */
+        .kpi-business {
+            border-left: 5px solid #ff005c; 
+        }
+        /* Color para las métricas del modelo (Model KPIs) */
+        .kpi-model {
+            border-left: 5px solid #00c7e5; /* Azul claro para diferenciar */
+        }
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-800">[Mock-up] Desempeño del Sistema de Recomendación</h1>
+        <p class="text-gray-500 mt-1">Este tablero monitorea la efectividad del modelo y su estabilidad técnica (Data Drift).</p>
+    </header>
+
+    <!-- SECCIÓN 1: Resultados de Negocio - Impacto Post-Modelo -->
+    <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">1. Resultados de Negocio (Línea Base vs. Actual)</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+        <!-- KPI 1: Engagement Promedio (Métrico Clave) -->
+        <div class="card p-5 kpi-business">
+            <p class="text-sm font-medium text-gray-500">Video Visto Promedio (%)</p>
+            <p class="text-3xl font-bold mt-1 text-gray-800">77%</p>
+            <p class="text-xs text-green-500 font-semibold mt-1">Línea Base (68%) superada en 9 puntos porcentuales.</p>
+        </div>
+
+        <!-- KPI 2: Tasa de Churn (Métrico Clave) -->
+        <div class="card p-5 kpi-business">
+            <p class="text-sm font-medium text-gray-500">Tasa de Rotación (Churn Rate)</p>
+            <p class="text-3xl font-bold mt-1 text-gray-800">10.1%</p>
+            <p class="text-xs text-green-500 font-semibold mt-1">Reducción de 2.4 puntos vs. Línea Base (12.5%).</p>
+        </div>
+
+        <!-- KPI 3: Volumen de Eventos (Contexto) -->
+        <div class="card p-5 kpi-business">
+            <p class="text-sm font-medium text-gray-500">Volumen Total de Eventos (Mixpanel)</p>
+            <p class="text-3xl font-bold mt-1 text-gray-800">1.3 M</p>
+            <p class="text-xs text-green-500 font-semibold mt-1">+8.3% vs. Línea Base</p>
+        </div>
+    </div>
+    
+    <!-- SECCIÓN 2: Desempeño del Modelo de Recomendación (Metrics MLOps) -->
+    <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">2. Desempeño del Sistema de Recomendación)</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+        <!-- KPI Modelo 1: Tasa de Clics (CTR) -->
+        <div class="card p-5 kpi-model">
+            <p class="text-sm font-medium text-gray-500">Tasa de Clics (CTR) de Recomendaciones</p>
+            <p class="text-3xl font-bold mt-1 text-gray-800">18%</p>
+            <p class="text-xs text-green-500 font-semibold mt-1">Target Mínimo: 15%</p>
+        </div>
+
+        <!-- KPI Modelo 2: Recall/Cobertura -->
+        <div class="card p-5 kpi-model">
+            <p class="text-sm font-medium text-gray-500">Recall/Cobertura del Catálogo (%)</p>
+            <p class="text-3xl font-bold mt-1 text-gray-800">95%</p>
+            <p class="text-xs text-yellow-600 font-semibold mt-1">95% de las clases son recomendadas al menos una vez/día.</p>
+        </div>
+
+        <!-- KPI Modelo 3: Data Drift (Estabilidad) -->
+        <div class="card p-5 kpi-model">
+            <p class="text-sm font-medium text-gray-500">Alerta de Data Drift (Estabilidad de Datos)</p>
+            <p class="text-3xl font-bold mt-1 text-green-600">Ninguna</p>
+            <p class="text-xs text-gray-500 font-semibold mt-1">El comportamiento de entrada sigue el patrón esperado.</p>
+        </div>
+    </div>
+
+
+    <!-- SECCIÓN 3: Gráficos de Datos (Estabilidad y Segmentación) -->
+    <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">3. Monitoreo y Segmentación Base</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        <!-- Gráfico 1: Monitoreo de Consistencia de Datos (Estabilidad) -->
+        <div class="card p-5">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">Consistencia Diaria de Eventos (EVENT_NAME)</h2>
+            <div class="chart-container">
+                <canvas id="consistencyChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Valida que los flujos de datos son estables. (Calidad de Datos)</p>
+        </div>
+
+        <!-- Gráfico 2: Análisis de Engagement (Distribución) -->
+        <div class="card p-5">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">Distribución de Consumo de Videos</h2>
+            <div class="chart-container">
+                <canvas id="engagementChart"></canvas>
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Muestra cómo ha cambiado la distribución de consumo post-modelo.</p>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 4: Segmentación y Perfil de Usuario (Ingeniería de Características) -->
+    <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">4. Segmentación y Perfil de Usuario</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Tabla 1: Top 5 Rítmos de Clases Vistas -->
+        <div class="card p-5">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">Top 5 Rítmos Vistos (CLASS_RHYTHMS)</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rítmo</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Porcentaje de Vistas</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Intensidad Dominante</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">Salsa</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">25%</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Medium</td></tr>
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">Reggaeton</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">20%</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Medium/High</td></tr>
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">Hip Hop</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">15%</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Medium</td></tr>
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">Bachata</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">12%</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Low</td></tr>
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">Pop</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">10%</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">High</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tabla 2: Segmentación por Preferencia de Usuario (Ingeniería de Características) -->
+        <div class="card p-5">
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">Segmentación de Usuario (USER_GENDER_IDENTITY, USER_AGE)</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Segmento de Edad</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nivel de Actividad Dominante</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">18-24 Años</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Alta (6+ Clases/Semana)</td></tr>
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">25-34 Años</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Media (3-5 Clases/Semana)</td></tr>
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">35-49 Años</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Baja (1-2 Clases/Semana)</td></tr>
+                        <tr><td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">50+ Años</td><td class="px-4 py-2 whitespace-nowrap text-gray-700">Media/Baja</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-gray-400 mt-3">Muestra la base para crear los "Perfiles de Comportamiento".</p>
+        </div>
+    </div>
+
+
+    <script>
+        // --- 1. DATOS DE MOCKUP ---
+        // Estos datos simulan la salida de tus consultas en Snowflake
+
+        // Datos de Consistencia (Estabilidad)
+        const consistencyData = {
+            labels: ['Día -6', 'Día -5', 'Día -4', 'Día -3', 'Día -2', 'Día -1', 'Hoy'],
+            events: [160000, 162000, 159000, 161000, 158000, 163000, 164000],
+        };
+
+        // Datos de Engagement Post-Modelo (Simulando mejora)
+        const engagementData = {
+            labels: ['Abandono (0%)', 'Bajo (1-50%)', 'Medio (51-99%)', 'Completo (100%)'],
+            counts: [250000, 100000, 500000, 800000], // Menos abandono, más completo
+        };
+
+        // --- 2. CONFIGURACIÓN Y RENDERIZACIÓN DE GRÁFICOS ---
+        window.onload = function() {
+            // Gráfico de Consistencia (Líneas)
+            const ctxConsistency = document.getElementById('consistencyChart').getContext('2d');
+            new Chart(ctxConsistency, {
+                type: 'line',
+                data: {
+                    labels: consistencyData.labels,
+                    datasets: [{
+                        label: 'Eventos (VIDEO_WATCHED, CLICK, etc.)',
+                        data: consistencyData.events,
+                        borderColor: '#ff005c', 
+                        backgroundColor: 'rgba(255, 0, 92, 0.1)',
+                        tension: 0.3,
+                        pointBackgroundColor: '#ff005c',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Conteo de Eventos' } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }
+                }
+            });
+
+            // Gráfico de Engagement (Barras)
+            const ctxEngagement = document.getElementById('engagementChart').getContext('2d');
+            new Chart(ctxEngagement, {
+                type: 'bar',
+                data: {
+                    labels: engagementData.labels,
+                    datasets: [{
+                        label: 'Conteo de Sesiones',
+                        data: engagementData.counts,
+                        backgroundColor: [
+                            '#ef4444', '#fbbf24', '#3b82f6', '#10b981'
+                        ],
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Usuarios (Conteo)' } },
+                        x: { title: { display: true, text: 'VIDEO_WATCHED_PERCENTAGE Buckets' } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
