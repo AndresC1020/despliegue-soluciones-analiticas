@@ -2,29 +2,32 @@
 FROM python:3.12-slim
 
 # --- 1. CONFIGURACIÓN DEL USUARIO NO-ROOT ---
-# Crear usuario que ejecuta la app
 RUN adduser --disabled-password --gecos '' api-user
 
-# Definir directorio de trabajo
+# Definir directorio de trabajo dentro del contenedor
 WORKDIR /opt/zumba-churn-api
 
 # --- 2. INSTALACIÓN DE DEPENDENCIAS Y PAQUETE ---
-# Copiar el archivo de dependencias y la carpeta del proyecto
+
+# Copiar el archivo de dependencias primero para optimizar el cacheo.
 COPY requirements/requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install -r requirements.txt
 
-# Copiar el paquete completo y archivos de la API
-# Se copia todo lo necesario para la instalación y el runtime.
-COPY setup.py .
-COPY MANIFEST.in .
-COPY VERSION .
-COPY api.py .
-COPY requirements/ ./requirements/
-COPY zumba_churn_pkg ./zumba_churn_pkg
+# --- Instalación del paquete del modelo desde el archivo WHL ---
+# 1. Copia el archivo .whl desde el directorio 'model-pkg' al WORKDIR.
+COPY model-pkg/zumba_churn_pkg-0.0.1-py3-none-any.whl .
 
-# Instalar su paquete localmente (necesario para que 'from zumba_churn_pkg...' funcione)
-RUN pip install .
+# 2. Instala el paquete usando pip.
+RUN pip install zumba_churn_pkg-0.0.1-py3-none-any.whl
+
+# --- Copiar los archivos de la API (FastAPI) ---
+# Estos son los archivos de la aplicación que deben estar presentes para que Uvicorn se ejecute.
+COPY config.yml .       # Archivo de configuración
+COPY VERSION .          # Versión del modelo/API
+COPY api.py .           # Lógica de los endpoints de la API
+COPY config.py .        # Configuración de Pydantic/Logging
+COPY main.py .          # Punto de entrada de FastAPI/Uvicorn
 
 # --- 3. CONFIGURACIÓN DE SEGURIDAD Y EJECUCIÓN ---
 # Copiar el script de inicio
@@ -38,8 +41,8 @@ RUN chown -R api-user:api-user .
 # Cambiar al usuario no-root para ejecutar la aplicación
 USER api-user
 
-# Puerto a exponer para la api (Usaremos el 8000 por defecto de Uvicorn/FastAPI)
+# Puerto a exponer para la api
 EXPOSE 8000
 
 # Comandos a ejecutar al correr el contenedor
-CMD ["bash", "run.sh"]
+CMD ["bash", "./run.sh"]
