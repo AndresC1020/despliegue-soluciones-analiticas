@@ -1,0 +1,91 @@
+# config.yml
+
+package:
+  name: zumba_churn_pkg
+  version: 1.0.0
+  author: Daniela Uscategui, Andres Alfonso, Francisco Amorocho
+  description: Modelo XGBoost para predicción de churn en suscripciones mensuales
+
+data:
+  training_file: raw_ZumbaConsumerAppChurn30D.csv
+  prediction_file: raw_NewPredictChurnData.csv      # Archivo de ENTRADA para predicciones
+  output_predictions_file: predictions_ChurnPredictedData.csv # Archivo de SALIDA de predicciones
+  target_variable: PAID_SUBSCRIPTION_CHURN_30D
+
+features:
+  multilabel_feature: MUSIC_PREFERENCE 
+  selected_features:
+    - TRIAL_DURATION_DAYS
+    - SUBSCRIPTION_TIER
+    - SUBSCRIPTION_SOURCE
+    - SUBSCRIPTION_PROVIDER
+    - COUNTRY
+    - CLASS_PER_WEEK_GOAL
+    - DANCE_LEVEL_PREFERENCE
+    - FITNESS_GOAL_PREFERENCE
+    - APP_VERSION
+    - DEVICE_OPERATING_SYSTEM
+    - DEVICE_BRAND
+    - APP_INSTALL_TO_PAID_SUBSCRIPTION_DAYS
+    - NO_VIDEO_STARTED_30D
+    - NO_VIDEO_WATCHED_30D
+    - AVG_VIDEO_WATCHED_PERCENTAGE_30D
+    - AVG_VIDEO_LENGTH_MIN_30D
+    - CLASS_INTENSITY_PREFERENCE_High
+    - CLASS_INTENSITY_PREFERENCE_Low
+    - CLASS_INTENSITY_PREFERENCE_Medium
+    - MUSIC_PREFERENCE_Afro Rhythms
+    - MUSIC_PREFERENCE_Afrobeats
+    - MUSIC_PREFERENCE_Alternative
+    - MUSIC_PREFERENCE_Bachata
+    - MUSIC_PREFERENCE_Belly Dance
+    - MUSIC_PREFERENCE_Bellydance
+    - MUSIC_PREFERENCE_Bhangra
+    - MUSIC_PREFERENCE_Blues
+    - MUSIC_PREFERENCE_Bollywood
+    - MUSIC_PREFERENCE_Brazilian Rhythms
+    - MUSIC_PREFERENCE_Broadway
+    - MUSIC_PREFERENCE_Caribbean Rhythms
+    - MUSIC_PREFERENCE_Chill Out
+    - MUSIC_PREFERENCE_Country
+    - MUSIC_PREFERENCE_Cumbia
+    - MUSIC_PREFERENCE_Disco
+    - MUSIC_PREFERENCE_Electronic
+    - MUSIC_PREFERENCE_House
+    - MUSIC_PREFERENCE_K-Pop
+    - MUSIC_PREFERENCE_Merengue
+    - MUSIC_PREFERENCE_Other
+    - MUSIC_PREFERENCE_Pop
+    - MUSIC_PREFERENCE_R&B
+    - MUSIC_PREFERENCE_Reggae
+    - MUSIC_PREFERENCE_Reggaeton
+    - MUSIC_PREFERENCE_Rock
+    - MUSIC_PREFERENCE_Salsa
+    - MUSIC_PREFERENCE_Soca
+    - MUSIC_PREFERENCE_Techno
+    - MUSIC_PREFERENCE_World Rhythms
+
+model:
+  type: xgboost.XGBClassifier
+  hyperparameters:
+    n_estimators: 300
+    max_depth: 5
+    learning_rate: 0.035
+    colsample_bytree: 0.6
+    subsample: 0.9
+    reg_lambda: 8
+    min_child_weight: 9
+    eval_metric: auc
+    enable_categorical: true
+    random_state: 0
+
+training:
+  test_size: 0.25
+  random_state: 42
+
+artifacts:
+  model_file: churn_model.pkl
+  binarizer_file: mlb_classes.pkl
+  output_predictions: predictions_ChurnPredictedData.csv
+  assets_path: zumba_churn_pkg/assets
+

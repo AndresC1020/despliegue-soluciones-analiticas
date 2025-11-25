@@ -1,0 +1,22 @@
+# MANIFEST.in
+
+# --- 1. Requisitos (ESENCIAL para el build) ---
+recursive-include requirements *.txt
+
+# --- 2. Archivos de Configuración de la Raíz ---
+include VERSION
+include config.yml
+include *.md
+include *.txt
+
+# --- 3. Archivos de Datos (Ubicados en la carpeta 'data/') ---
+recursive-include data *.csv
+include data/predictions_ChurnPredictedData.csv
+include data/raw_NewPredictChurnData.csv
+include data/raw_ZumbaConsumerAppChurn30D.csv
+
+# --- 4. Exclusiones de Limpieza ---
+exclude *.log
+exclude *.cfg
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
