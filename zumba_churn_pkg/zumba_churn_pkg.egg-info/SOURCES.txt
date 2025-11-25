@@ -1,0 +1,13 @@
+pyproject.toml
+setup.py
+zumba_churn_pkg/__init__.py
+zumba_churn_pkg/model.py
+zumba_churn_pkg.egg-info/PKG-INFO
+zumba_churn_pkg.egg-info/SOURCES.txt
+zumba_churn_pkg.egg-info/dependency_links.txt
+zumba_churn_pkg.egg-info/requires.txt
+zumba_churn_pkg.egg-info/top_level.txt
+zumba_churn_pkg/../VERSION
+zumba_churn_pkg/../config.yml
+zumba_churn_pkg/assets/churn_model.pkl
+zumba_churn_pkg/assets/mlb_classes.pkl
