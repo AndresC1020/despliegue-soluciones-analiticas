@@ -2,6 +2,8 @@
 from pathlib import Path
 import yaml
 import importlib.resources as pkg_resources
+from pydantic import AnyHttpUrl
+from pydantic_settings import BaseSettings
 
 PACKAGE_ROOT = Path(__file__).resolve().parent
 ASSETS_DIR = PACKAGE_ROOT / "assets"

@@ -1,9 +1,7 @@
-# config.py
-
 import logging
 import sys
 from types import FrameType
-from typing import List, cast
+from typing import cast
 
 from loguru import logger
 from pydantic import AnyHttpUrl
@@ -11,7 +9,7 @@ from pydantic_settings import BaseSettings
 
 # Configuración del nivel de logging
 class LoggingSettings(BaseSettings):
-    LOGGING_LEVEL: int = logging.INFO 
+    LOGGING_LEVEL: int = logging.INFO
 
 # Configuración de la aplicación
 class Settings(BaseSettings):
@@ -20,17 +18,19 @@ class Settings(BaseSettings):
     logging: LoggingSettings = LoggingSettings()
 
     # Orígenes permitidos para CORS
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
-        "http://localhost:3000",  # type: ignore
-        "http://localhost:8000",  # type: ignore
-        "https://localhost:3000",  # type: ignore
-        "https://localhost:8000",  # type: ignore
+    BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "https://localhost:3000",
+        "https://localhost:8000",
     ]
 
-    PROJECT_NAME: str = "Zumba Churn Predictor API" 
+    PROJECT_NAME: str = "Zumba Churn Predictor API"
 
-    class Config:
-        case_sensitive = True
+    # Migración a Pydantic v2
+    model_config = {
+        "case_sensitive": True
+    }
 
 # Handler para interceptar registros y redirigirlos a loguru
 class InterceptHandler(logging.Handler):
@@ -55,9 +55,9 @@ def setup_app_logging(config: Settings) -> None:
     """Se configura el logging personalizado."""
 
     LOGGERS = ("uvicorn.asgi", "uvicorn.access")
-    
+
     logging.getLogger().handlers = [InterceptHandler()]
-    
+
     for logger_name in LOGGERS:
         logging_logger = logging.getLogger(logger_name)
         logging_logger.handlers = [InterceptHandler(level=config.logging.LOGGING_LEVEL)]

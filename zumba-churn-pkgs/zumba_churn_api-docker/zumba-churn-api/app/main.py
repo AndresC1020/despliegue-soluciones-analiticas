@@ -8,8 +8,8 @@ from fastapi.responses import HTMLResponse
 from loguru import logger
 
 # Se importan los módulos de la aplicación
-from api import api_router
-from config import settings, setup_app_logging 
+from app.api import api_router
+from app.config import settings, setup_app_logging
 
 # --- Inicialización del Logging ---
 setup_app_logging(config=settings)
@@ -65,15 +65,12 @@ if settings.BACKEND_CORS_ORIGINS:
 
 
 def start():
-    """
-    Se inicia el servidor Uvicorn.
-    """
-    logger.warning("Se ejecuta en modo de desarrollo. No se recomienda para producción.")
+    port = int(os.getenv("PORT", 8000))  # usa variable de entorno PORT o 8000 por defecto
     uvicorn.run(
-        app, 
-        host="0.0.0.0", 
-        port=8001,      
-        log_level="info" 
+        app,
+        host="0.0.0.0",
+        port=port,
+        log_level="info"
     )
 
 if __name__ == "__main__":

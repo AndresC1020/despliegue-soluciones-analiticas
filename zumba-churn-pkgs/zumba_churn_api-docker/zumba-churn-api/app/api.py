@@ -114,7 +114,6 @@ class MultipleInputData(BaseModel):
 @api_router.get("/health", status_code=status.HTTP_200_OK)
 def health_check():
     """Se verifica el estado de salud de la API."""
-    # Se asume que si la API está arriba y el paquete cargó, el modelo está listo.
     return {"status": "ok", "model_loaded": True}
 
 @api_router.get("/version", status_code=status.HTTP_200_OK)
